@@ -1,0 +1,8 @@
+This is all you have configured!
+folder =
+all_files = 0
+
+if you have many files, these options might be useful, but use only one of them!
+otherwise it won't make much sense would it
+to_omit =
+to include =
