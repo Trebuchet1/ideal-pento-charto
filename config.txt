@@ -1,0 +1,7 @@
+This is all you have configured!
+
+folder_name = folder
+
+columns, 1 or higher, column 0 is your x values
+  from = 1
+  to = 3
