@@ -22,9 +22,42 @@ for x in range(0, len(files)):
     print('loaded')
     t_header = t_file.readline().split()
     t_array = np.loadtxt(t_file, skiprows=1)
-    data = t_array[0,:]
+    data = np.array([t_array[0,:]])
     for x in range(from_col, to_col):
         header.append(t_header[x])
-        np.append(data, t_array[x, :])
+        data = np.append(data, [t_array[x, :]], axis = 0)
 # NOTE: header is a list of column names
 # NOTE: data is a numpy array of data coresponding to header
+
+#Jas pracuje od tego momentu ;)
+
+print("Array Dimension = ",len(data.shape))
+fig, ax = plt.subplots()
+
+def D(x,y):
+    yprime = np.diff(y)/np.diff(x)
+    xprime=[]
+    for i in range(len(yprime)):
+        xtemp = (x[i+1]+x[i])/2
+        xprime = np.append(xprime,xtemp)
+    return xprime, yprime
+
+axx = data[0, :]
+
+for x in range(1, (len(header)+1)):
+    axy = data[x, :]
+    xprime, yprime = D(axx,axy)
+    ax.plot(xprime,yprime,label = ("Derivative of " + header[x-1]))
+
+
+for x in range(1, (len(header)+1)):
+    axy = data[x, :]
+    xprime, yprime = D(axx,axy)
+    xprime, yprime = D(xprime, yprime)
+    ax.plot(xprime,yprime,label = ("2nd derivative of " + header[x-1]))
+
+plt.xlabel(header[0])
+
+plt.ylabel(":)")
+plt.legend()
+plt.show
