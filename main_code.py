@@ -28,3 +28,27 @@ for x in range(0, len(files)):
         np.append(data, t_array[x, :])
 # NOTE: header is a list of column names
 # NOTE: data is a numpy array of data coresponding to header
+
+#Jas pracuje od tego momentu ;)
+
+
+fig, ax = plt.subplots()
+
+def D(x,y):
+    yprime = np.diff(y)/np.diff(x)
+    xprime=[]
+    for i in range(len(yprime)):
+        xtemp = (x[i+1]+x[i])/2
+        xprime = np.append(xprime,xtemp)
+    return xprime, yprime
+
+axx = data[0, :]
+
+for x in range(1, (len(header)+1)):
+    axy = data[x, :]
+    xprime, yprime = D(axx,axy)
+    ax.plot(xprime,yprime,label="Derivative")
+
+xprime2, yprime2 = D(xprime,yprime)
+plt.plot(xprime2,yprime2,label="2nd Derivative")
+plt.legend()
