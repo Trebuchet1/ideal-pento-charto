@@ -11,16 +11,14 @@ folder = config.split('\n')[2].split('=')[1].strip()
 from_col = int(config.split('\n')[5].split('=')[1])
 to_col = int(config.split('\n')[6].split('=')[1])
 files_list = config.split('\n')[9].split('=')[1]
-
 if files_list.strip():
     # NOTE: creates a list of specified files if there is anything in the config
-    files = [os.path.join(cwd, folder,x.strip()) for x in files_list.split(',')]
+    files = [os.path.join(os.path.dirname(cwd), folder,x.strip()) for x in files_list.split(',')]
     print('Using files:\n', '\n'.join([os.path.basename(x) for x in files]))
 else:
     # NOTE: creates a list of all files in a directory we want
-    files = sorted(glob.glob(os.path.join(cwd, folder,"*.txt")))
+    files = sorted(glob.glob(os.path.join(os.path.dirname(cwd), folder,"*.txt")))
     print('Using files:\n', ',\n'.join([os.path.basename(x) for x in files]))
-
 header = []
 for x in range(0, len(files)):
     t_file = open(files[x], 'r')
