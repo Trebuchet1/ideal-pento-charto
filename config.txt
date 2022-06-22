@@ -5,3 +5,6 @@ folder_name = folder
 columns, 1 or higher, column 0 is your x values
   from = 1
   to = 3
+
+specify files if you wish to include only some specific ones
+  files =
