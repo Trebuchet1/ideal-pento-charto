@@ -6,14 +6,14 @@ import glob
 
 config = open('config.txt', 'r').read()
 # NOTE: creates a list of files within a folder specified in config file
-folder = config.split('\n')[2].split('=')[1].strip() 
+folder = config.split('\n')[2].split('=')[1].strip()
 from_col = int(config.split('\n')[5].split('=')[1])
 to_col = int(config.split('\n')[6].split('=')[1])
 
 # NOTE: gets the current directory
-cwd = os.getcwd() 
+cwd = os.getcwd()
 # NOTE: creates a list of files in a directory we want
-files = sorted(glob.glob(os.path.join(cwd, folder,"*.txt"))) 
+files = sorted(glob.glob(os.path.join(cwd, folder,"*.txt")))
 print('Used files:\n', ',\n'.join([os.path.basename(x) for x in files]))
 
 header = []
@@ -30,10 +30,8 @@ for x in range(0, len(files)):
 # NOTE: data is a numpy array of data coresponding to header
 
 #Jas pracuje od tego momentu ;)
-
-print("Array Dimension = ",len(data.shape))
 fig, ax = plt.subplots()
-
+#definig fuction for derivatives
 def D(x,y):
     yprime = np.diff(y)/np.diff(x)
     xprime=[]
@@ -43,13 +41,10 @@ def D(x,y):
     return xprime, yprime
 
 axx = data[0, :]
-
 for x in range(1, (len(header)+1)):
     axy = data[x, :]
     xprime, yprime = D(axx,axy)
     ax.plot(xprime,yprime,label = ("Derivative of " + header[x-1]))
-
-
 for x in range(1, (len(header)+1)):
     axy = data[x, :]
     xprime, yprime = D(axx,axy)
@@ -57,7 +52,7 @@ for x in range(1, (len(header)+1)):
     ax.plot(xprime,yprime,label = ("2nd derivative of " + header[x-1]))
 
 plt.xlabel(header[0])
-
 plt.ylabel(":)")
 plt.legend()
-plt.show
+
+plt.show()
