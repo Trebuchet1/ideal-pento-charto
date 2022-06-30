@@ -1,15 +1,15 @@
 This is all you have configured!
 
 first, choose your fighter [0, 1]
-  normal chart = 0
+  normal chart = 1
+  quick data modification = 1
   derivatives chart = 1
-  something else = 0
 
 folder_name = folder
 
 specify files if you wish to include only some specific ones
   files =
 
-columns, 1 or higher, column 0 is your x values
+columns, 1 or higher, column 0 is your x values, so don't enter 0
   from =
   to =
