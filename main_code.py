@@ -3,8 +3,11 @@ from matplotlib import pyplot as plt
 import pandas as pd
 import os
 import glob
+<<<<<<< HEAD
 # NOTE: gets the current directory
 cwd = os.getcwd()
+=======
+>>>>>>> origin/main
 config = open('config.txt', 'r').read()
 # NOTE: creates a list of files within a folder specified in config file
 type1 = int(config.split('\n')[3].split('=')[1]) # NOTE: types
@@ -48,8 +51,21 @@ for x in range(0, len(files)):
             data = np.append(data, [t_array[x, :]], axis = 0)
 # NOTE: header is a list of column names
 # NOTE: data is a numpy array of data coresponding to header
+#Grzes robi teraz fragment
+dataX=data
+dataX[0,:]=(datachange(data[0,:]))
+print("Wpisz fukcję dla reszty kolumn Y lub NIE by pominąć")
+funkcja=input()
+if funkcja == "NIE":
+    print("Skip")
+else:
+    i=0
+    while i<len(data[:,0]):
+        dataX[i,:]=datachange_mass(data[i,:],funkcja)
+        i=i+1
 
 #Jas pracuje od tego momentu ;)
+<<<<<<< HEAD
 if type2 == 1:
     fig, ax = plt.subplots()
     #definig fuction for derivatives
@@ -77,3 +93,37 @@ if type2 == 1:
     plt.ylabel(":)")
     plt.legend()
     plt.show()
+=======
+print("Array Dimension = ",len(data.shape))
+fig, ax = plt.subplots()
+
+def D(x,y):
+    yprime = np.diff(y)/np.diff(x)
+    xprime=[]
+    for i in range(len(yprime)):
+        xtemp = (x[i+1]+x[i])/2
+        xprime = np.append(xprime,xtemp)
+    return xprime, yprime
+
+axx = data[0, :]
+
+for x in range(1, (len(header)+1)):
+    axy = data[x, :]
+    xprime, yprime = D(axx,axy)
+    ax.plot(xprime,yprime,label = ("Derivative of " + header[x-1]))
+
+
+for x in range(1, (len(header)+1)):
+    axy = data[x, :]
+    xprime, yprime = D(axx,axy)
+    xprime, yprime = D(xprime, yprime)
+    ax.plot(xprime,yprime,label = ("2nd derivative of " + header[x-1]))
+
+plt.xlabel(header[0])
+
+plt.ylabel(":)")
+plt.legend()
+plt.show
+
+#Peter 
+>>>>>>> origin/main
