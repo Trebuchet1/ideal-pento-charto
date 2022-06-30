@@ -1,11 +1,9 @@
 
 def datachange(lista):
-    print("Podaj jakim zmianÄ
- chcesz poddaÄ‡ dane. zmiennÄ
- nazwij x. Jesli nie chcesz edytowac danych wpisz NIE  PrzykÅ‚ad: x*100-70")
+    print("Specify how you want to change your data, for a variable use 'x' If you would rather not do that just put down 'NO'.  Example: x*100-70")
     F = input()
-    if F=="NIE":
-        print("PominiÄ™to")
+    if F=="NO":
+        print("Skipped")
     else:
         l=len(lista)
         dane = [0]*l
@@ -18,7 +16,7 @@ def datachange(lista):
             i+=1
         print(dane)
         return(dane)
-    
+
 def datachange_mass(lista, funkcja):
         l=len(lista)
         dane = [0]*l
@@ -29,4 +27,3 @@ def datachange_mass(lista, funkcja):
             i+=1
         print(dane)
         return(dane)
-    

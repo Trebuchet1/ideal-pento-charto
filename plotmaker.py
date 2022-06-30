@@ -1,4 +1,4 @@
-def plotmaker(data, header)
+def plotmaker(data, header):
 
 	fig = plt.figure(figsize=(14, 4))
 

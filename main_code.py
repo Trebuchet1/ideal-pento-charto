@@ -5,8 +5,8 @@ import os
 import glob
 
 # NOTE: file imports
-from datachange import datachange(lista)
-from plotmaker import
+from datachange import *
+from plotmaker import *
 
 # NOTE: gets the current directory
 cwd = os.getcwd()
@@ -59,7 +59,7 @@ for file in files:
 
 #Grzes robi teraz fragment
 if type3 == 1:
-    dataX[0,:]=(datachange(data[0,:]))
+    data[0,:]=(datachange(data[0,:]))
     print("Wpisz fukcję dla reszty kolumn Y lub NIE by pominąć")
     funkcja=input()
     if funkcja == "NIE":
