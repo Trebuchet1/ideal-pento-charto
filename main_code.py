@@ -3,7 +3,6 @@ from matplotlib import pyplot as plt
 import pandas as pd
 import os
 import glob
-
 config = open('config.txt', 'r').read()
 # NOTE: creates a list of files within a folder specified in config file
 folder = config.split('\n')[2].split('=')[1].strip() 
@@ -28,9 +27,20 @@ for x in range(0, len(files)):
         data = np.append(data, [t_array[x, :]], axis = 0)
 # NOTE: header is a list of column names
 # NOTE: data is a numpy array of data coresponding to header
+#Grzes robi teraz fragment
+dataX=data
+dataX[0,:]=(datachange(data[0,:]))
+print("Wpisz fukcję dla reszty kolumn Y lub NIE by pominąć")
+funkcja=input()
+if funkcja == "NIE":
+    print("Skip")
+else:
+    i=0
+    while i<len(data[:,0]):
+        dataX[i,:]=datachange_mass(data[i,:],funkcja)
+        i=i+1
 
 #Jas pracuje od tego momentu ;)
-
 print("Array Dimension = ",len(data.shape))
 fig, ax = plt.subplots()
 
