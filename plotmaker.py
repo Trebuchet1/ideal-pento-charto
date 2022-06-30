@@ -23,5 +23,5 @@ def plotmaker(data, header)
 
 
 
-
+#cześć
 
