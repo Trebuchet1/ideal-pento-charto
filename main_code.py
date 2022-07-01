@@ -34,7 +34,8 @@ if files_list.strip():
 else:
     # NOTE: creates a list of all files in a directory we want
     files = sorted(glob.glob(os.path.join(os.path.dirname(cwd), folder,"*.txt")))
-    print('Using files:\n', ',\n'.join([os.path.basename(x) for x in files]))
+    filenames = [os.path.basename(x) for x in files]
+    print('Using files:\n', ',\n'.join(filenames))
 
 
 # NOTE: creating the combined array, welcome to hell
@@ -43,16 +44,16 @@ for file_name in files:
     print('loaded')
     #refer to functions file for description
     t_array, t_header = file_dubugger(file_name)
-    print(t_header)
     if file_name == files[0]:
         header.append(t_header[0])
         data = np.transpose(np.array([t_array[:, 0]]))
     if not (isinstance(from_col, str) or isinstance(to_col, str)):
-            header = header + t_header[from_col:to_col]
+            header += t_header[from_col:to_col]
             data = np.concatenate((data, t_array[from_col:to_col, :]), axis = 1)
     else:
-        header.append(t_header[1:])
+        header += [(x + ' ' + os.path.basename(file_name)) for x in t_header[1:]]
         data = np.concatenate((data, t_array[:, 1:]), axis = 1)
+print(header)
 print(data)
 # NOTE: header is a list of column names
 # NOTE: data is a numpy array of data coresponding to header
@@ -104,7 +105,7 @@ if type1 == 1:
     fig, ax = plt.subplots()
     for i in range(1, len(header)):
         ax.plot(data[:, 0], data[:, i], label = header[i])
-    plt.xlabel("C stężenie")
+    plt.xlabel(header[0])
     plt.ylabel("Y sygnał")
     plt.legend()
     plt.show()
