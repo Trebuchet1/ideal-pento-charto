@@ -1,31 +1,30 @@
 import numpy as np
 from matplotlib import pyplot as plt
-import pandas as pd
+import math
 import os
 import glob
 
 # NOTE: file imports
-from datachange import *
-from plotmaker import *
+from functions import *
 
 # NOTE: gets the current directory
 cwd = os.getcwd()
-config = open('config.txt', 'r').read()
+config = open('config.txt', 'r').read().split('\n')
 
 # NOTE: creates a list of files within a folder specified in config file
-type1 = int(config.split('\n')[3].split('=')[1]) # NOTE: types
-type2 = int(config.split('\n')[4].split('=')[1])
-type3 = int(config.split('\n')[5].split('=')[1])
-folder = config.split('\n')[7].split('=')[1].strip() # NOTE: folder
+type1 = int(config[3].split('=')[1]) # NOTE: types
+type2 = int(config[4].split('=')[1])
+type3 = int(config[5].split('=')[1])
+folder = config[7].split('=')[1].strip() # NOTE: folder
 
 # NOTE: chosen columns
-from_col = config.split('\n')[13].split('=')[1]
+from_col = config[13].split('=')[1]
 if from_col == True:
     from_col = int(from_col)
-to_col = config.split('\n')[14].split('=')[1]
+to_col = config[14].split('=')[1]
 if to_col == True:
     to_col = int(from_col)
-files_list = config.split('\n')[10].split('=')[1]
+files_list = config[10].split('=')[1]
 
 # NOTE: file names
 if files_list.strip():
@@ -36,13 +35,17 @@ else:
     # NOTE: creates a list of all files in a directory we want
     files = sorted(glob.glob(os.path.join(os.path.dirname(cwd), folder,"*.txt")))
     print('Using files:\n', ',\n'.join([os.path.basename(x) for x in files]))
-# NOTE: creating the combined array
+
+
+# NOTE: creating the combined array, welcome to hell
 header = []
 for file in files:
     t_file = open(file, 'r')
     print('loaded')
-    t_header = t_file.readline().split()
-    t_array = np.loadtxt(t_file, skiprows=1)
+    #refer to functions file for description
+    t_array, t_header = file_dubugger(t_file)
+    print(t_header)
+    print(t_array)
     if file == files[0]:
         header.append(t_header[0])
         data = np.array([t_array[0, :]])
@@ -52,10 +55,10 @@ for file in files:
     else:
         header = header + t_header[1:]
         data = np.concatenate((data, t_array[1:, :]), axis = 0)
-    print(data)
-    print(header)
+    print(np.shape(data))
 # NOTE: header is a list of column names
 # NOTE: data is a numpy array of data coresponding to header
+
 
 #Grzes robi teraz fragment
 if type3 == 1:
@@ -67,7 +70,7 @@ if type3 == 1:
     else:
         i=0
         while i<len(data[:,0]):
-            dataX[i,:]=datachange_mass(data[i,:],funkcja)
+            data[i,:]=datachange_mass(data[i,:],funkcja)
             i=i+1
 
 #Jas pracuje od tego momentu ;)
@@ -97,3 +100,5 @@ if type2 == 1:
     plt.ylabel(":)")
     plt.legend()
     plt.show()
+if type1 == 1:
+    print(plotmaker(data, header))

@@ -2,8 +2,8 @@ This is all you have configured!
 
 first, choose your fighter [0, 1]
   normal chart = 1
-  quick data modification = 1
-  derivatives chart = 1
+  derivatives chart = 0
+  quick data modification = 0
 
 folder_name = folder
 
