@@ -101,4 +101,12 @@ if type2 == 1:
     plt.legend()
     plt.show()
 if type1 == 1:
-    print(plotmaker(data, header))
+    fig, ax = plt.subplots()
+
+	for i in range(1, len(header)):
+		ax.plot(data[0, :], data[i, :], label = header[i])
+
+	plt.xlabel("C stężenie")
+	plt.ylabel("Y sygnał")
+	plt.legend()
+	plt.show()
