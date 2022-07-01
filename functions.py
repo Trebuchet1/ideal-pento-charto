@@ -5,27 +5,6 @@ import os
 import glob
 
 
-# Datagrabber - it finds the array and delimiter and header in the file
-# even if there is lots of unwanted crap placed there by the user
-def file_dubugger(file):
-    skip = 0
-    delimiters = [', ', ' ']
-    line = []
-    for x in range(1, 40):
-        header = line
-        line = file.readline()
-        for dl in delimiters:
-            try:
-                missing_line = [float(x.strip()) for x in line.split(dl)]
-                missing_line = np.array([[x] for x in missing_line])
-            except ValueError:
-                skip += 0.5
-            else:
-                t_array = np.loadtxt(file, delimiter = dl)
-                t_array = np.insert(t_array, 0, missing_line, axis = 0)
-                t_header = [x.strip() for x in header.split(dl)]
-                return t_array, t_header
-
 
 # Grzegorz
 def datachange(lista):
@@ -67,12 +46,39 @@ def plotmaker(data, header):
 	fig, ax = plt.subplots()
 
 	for i in range(1, len(header)):
-		ax.plot(data[0, :], data[i, :], label = header[i])
+		ax.plot(data[:, 0], data[:, i], label = header[i])
 
 	plt.xlabel("C stężenie")
 	plt.ylabel("Y sygnał")
 	plt.legend()
 	plt.show()
+
+# Datagrabber - it finds the array and delimiter and header in the file
+# even if there is lots of unwanted crap placed there by the user
+def file_dubugger(file_name):
+    file = open(file_name, 'r')
+    skip = 0
+    delimiters = [', ', ' ']
+    line = []
+    for x in range(1, 40):
+        header = line
+        line = file.readline()
+        for dl in delimiters:
+            try:
+                missing_line = [[float(x.strip()) for x in line.split(dl)]]
+            except ValueError:
+                skip += 0.5
+            else:
+                t_array = np.loadtxt(file, delimiter = dl)
+                t_array = np.concatenate((missing_line, t_array))
+                skip = math.ceil(skip)
+                header_search = open(file_name)
+                t_list = []
+                for x in range(skip):
+                    t_list.append(header_search.readline().strip())
+                t_header = list(filter(None, t_list))[-1].split(dl)
+                return t_array, t_header
+
 
 if __name__ == "__main__":
 	data = np.array([OX, OY_1, OY_2])

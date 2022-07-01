@@ -39,30 +39,28 @@ else:
 
 # NOTE: creating the combined array, welcome to hell
 header = []
-for file in files:
-    t_file = open(file, 'r')
+for file_name in files:
     print('loaded')
     #refer to functions file for description
-    t_array, t_header = file_dubugger(t_file)
+    t_array, t_header = file_dubugger(file_name)
     print(t_header)
-    print(t_array)
-    if file == files[0]:
+    if file_name == files[0]:
         header.append(t_header[0])
-        data = np.array([t_array[0, :]])
+        data = np.transpose(np.array([t_array[:, 0]]))
     if not (isinstance(from_col, str) or isinstance(to_col, str)):
             header = header + t_header[from_col:to_col]
-            data = np.concatenate((data, t_array[from_col:to_col, :]), axis = 0)
+            data = np.concatenate((data, t_array[from_col:to_col, :]), axis = 1)
     else:
-        header = header + t_header[1:]
-        data = np.concatenate((data, t_array[1:, :]), axis = 0)
-    print(np.shape(data))
+        header.append(t_header[1:])
+        data = np.concatenate((data, t_array[:, 1:]), axis = 1)
+print(data)
 # NOTE: header is a list of column names
 # NOTE: data is a numpy array of data coresponding to header
 
 
 #Grzes robi teraz fragment
 if type3 == 1:
-    data[0,:]=(datachange(data[0,:]))
+    data[:,0]=(datachange(data[:,0]))
     print("Wpisz fukcję dla reszty kolumn Y lub NIE by pominąć")
     funkcja=input()
     if funkcja == "NIE":
@@ -100,13 +98,13 @@ if type2 == 1:
     plt.ylabel(":)")
     plt.legend()
     plt.show()
+
+# Piotr
 if type1 == 1:
     fig, ax = plt.subplots()
-
-	for i in range(1, len(header)):
-		ax.plot(data[0, :], data[i, :], label = header[i])
-
-	plt.xlabel("C stężenie")
-	plt.ylabel("Y sygnał")
-	plt.legend()
-	plt.show()
+    for i in range(1, len(header)):
+        ax.plot(data[:, 0], data[:, i], label = header[i])
+    plt.xlabel("C stężenie")
+    plt.ylabel("Y sygnał")
+    plt.legend()
+    plt.show()
