@@ -53,15 +53,43 @@ def plotmaker(data, header):
 	plt.legend()
 	plt.show()
 
-# Datagrabber - it finds the array and delimiter and header in the file
-# even if there is lots of unwanted crap placed there by the user
-def data_debugger(file_name):
-    
+# NOTE: this one just checks if a file even has data
+def file_debugger(file):
+    source = open(file)
+    decimals = [',', '/s']
+    skippy = 0
+    for i in range(20):
+        line = source.readline()
+        try:
+            for i in decimals:
+                [float(n.strip()) for n in line.split(i)]
+        except ValueError:
+            skippy +=1
+        else:
+            return [skippy, i]
+    print('looks like {} is corrupted, look for hints in readme'.format(file))
+    return None
 
+def array_creator(files_list):
+    # NOTE: check if the file even has data in the first 20 lines
+    # TODO: make the 20 lines adjustable in config
+    header = ['x_label']
+    data = [[]]
+    for file in files_list:
+        f_row, decimal = file_debugger(file)
+        if f_row == None:
+            continue
+
+        t_data = file.readlines()[f_row-1]
+        t_header = t_data.pop(0).split(decimal)
+        header[0] = t_header[0]
+        header.append(t_header[1:])
+        
+        t_data = [[float(n.strip()) for n in i.split(decimal)] for i in t_data]
+        t_data = np.array(t_data).transpose().tolist()
+        data[0] = t_data[0]
+        data.append(data[1:])
+    return header, np.array(data)
 
 if __name__ == "__main__":
-	data = np.array([OX, OY_1, OY_2])
-
-	header = ["Miejsce1", "Miejsce2"]
-
-	print(plotmaker(data, header))
+    print('you ran the wrong file, run main.py!')

@@ -1,3 +1,5 @@
+from matplotlib import pyplot as plt
+
 def plotmaker(data, header):
 
 	fig = plt.figure(figsize=(14, 4))
@@ -15,10 +17,6 @@ def plotmaker(data, header):
 	fig, ax = plt.subplots()
 
 if __name__ == "__main__":
-	data = np.array([OX, OY_1, OY_2])
-
-	header = ["Miejsce1", "Miejsce2"]
-
-	print(plotmaker(data, header))
+	print('you ran the wrong file, run main.py!')
 
 #cześć
