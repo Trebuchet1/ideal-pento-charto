@@ -1,9 +1,6 @@
 import numpy as np
 from matplotlib import pyplot as plt
-import math
-import os
-import glob
-
+import re
 
 
 # Grzegorz
@@ -38,8 +35,6 @@ def datachange_mass(lista, funkcja):
 
 
 # Jasiek
-
-
 # Piotr
 def plotmaker(data, header):
 
@@ -56,17 +51,20 @@ def plotmaker(data, header):
 # NOTE: this one just checks if a file even has data
 def file_debugger(file):
     source = open(file)
-    decimals = [',', '/s']
+    dec = ['.', ',', '.']
+    whs = ['\s', '\s', ',']
     skippy = 0
-    for i in range(20):
+    for i in range(4):
         line = source.readline()
-        try:
-            for i in decimals:
-                [float(n.strip()) for n in line.split(i)]
-        except ValueError:
-            skippy +=1
-        else:
-            return [skippy, i]
+        for i in range(3):
+            try:
+                t_line = [x.replace(dec[i], '.') for x in re.split(whs[i], line) if x]
+                [float(n) for n in t_line]
+            except:
+                continue
+            else:
+                return [skippy, dec[i], whs[i]]
+        skippy+=1
     print('looks like {} is corrupted, look for hints in readme'.format(file))
     return None
 
@@ -76,20 +74,24 @@ def array_creator(files_list):
     header = ['x_label']
     data = [[]]
     for file in files_list:
-        f_row, decimal = file_debugger(file)
-        if f_row == None:
+        decision = file_debugger(file)
+        if decision == None:
             continue
-
-        t_data = file.readlines()[f_row-1]
-        t_header = t_data.pop(0).split(decimal)
+        f_row, dec, whs = decision
+        f = open(file)
+        t_data = f.readlines()[(f_row-1):]
+        t_header = [x for x in re.split(whs,t_data.pop(0)) if x]
         header[0] = t_header[0]
-        header.append(t_header[1:])
+        header += t_header[1:]
         
-        t_data = [[float(n.strip()) for n in i.split(decimal)] for i in t_data]
+        t_data = [[float(x.replace(dec, '.')) for x in re.split(whs, line) if x] for line in t_data]
         t_data = np.array(t_data).transpose().tolist()
         data[0] = t_data[0]
-        data.append(data[1:])
-    return header, np.array(data)
+        data += t_data[1:]
+    if len(header) != len(data):
+        print('looks like you have different syntax in headers and data\nI am generating my own')
+    header = [header[0]] + ['series '+str(i) for i in range(len(data)-1)]
+    return header, data
 
 if __name__ == "__main__":
     print('you ran the wrong file, run main.py!')
