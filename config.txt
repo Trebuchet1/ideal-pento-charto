@@ -8,8 +8,11 @@ first, choose your fighter [0, 1]
 folder_name = folder
 
 specify files if you wish to include only some specific ones
-  files =
+  files = 
 
 columns, 1 or higher, column 0 is your x values, so don't enter 0
   from =
   to =
+
+I normally suspect x axis and one or many data series in further files
+  xaxis = 1

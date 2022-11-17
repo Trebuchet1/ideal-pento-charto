@@ -1,9 +1,6 @@
 import numpy as np
 from matplotlib import pyplot as plt
-import math
-import os
-import glob
-
+import re
 
 
 # Grzegorz
@@ -38,8 +35,6 @@ def datachange_mass(lista, funkcja):
 
 
 # Jasiek
-
-
 # Piotr
 def plotmaker(data, header):
 
@@ -53,36 +48,50 @@ def plotmaker(data, header):
 	plt.legend()
 	plt.show()
 
-# Datagrabber - it finds the array and delimiter and header in the file
-# even if there is lots of unwanted crap placed there by the user
-def file_dubugger(file_name):
-    file = open(file_name, 'r')
-    skip = 0
-    delimiters = [', ', ' ']
-    line = []
-    for x in range(1, 40):
-        header = line
-        line = file.readline()
-        for dl in delimiters:
+# NOTE: this one just checks if a file even has data
+def file_debugger(file):
+    source = open(file)
+    dec = ['.', ',', '.']
+    whs = ['\s', '\s', ',']
+    skippy = 0
+    for i in range(4):
+        line = source.readline()
+        for i in range(3):
             try:
-                missing_line = [[float(x.strip()) for x in line.split(dl)]]
-            except ValueError:
-                skip += 0.5
+                t_line = [x.replace(dec[i], '.') for x in re.split(whs[i], line) if x]
+                [float(n) for n in t_line]
+            except:
+                continue
             else:
-                t_array = np.loadtxt(file, delimiter = dl)
-                t_array = np.concatenate((missing_line, t_array))
-                skip = math.ceil(skip)
-                header_search = open(file_name)
-                t_list = []
-                for x in range(skip):
-                    t_list.append(header_search.readline().strip())
-                t_header = list(filter(None, t_list))[-1].split(dl)
-                return t_array, t_header
+                return [skippy, dec[i], whs[i]]
+        skippy+=1
+    print('looks like {} is corrupted, look for hints in readme'.format(file))
+    return None
 
+def array_creator(files_list):
+    # NOTE: check if the file even has data in the first 20 lines
+    # TODO: make the 20 lines adjustable in config
+    header = ['x_label']
+    data = [[]]
+    for file in files_list:
+        decision = file_debugger(file)
+        if decision == None:
+            continue
+        f_row, dec, whs = decision
+        f = open(file)
+        t_data = f.readlines()[(f_row-1):]
+        t_header = [x for x in re.split(whs,t_data.pop(0)) if x]
+        header[0] = t_header[0]
+        header += t_header[1:]
+        
+        t_data = [[float(x.replace(dec, '.')) for x in re.split(whs, line) if x] for line in t_data]
+        t_data = np.array(t_data).transpose().tolist()
+        data[0] = t_data[0]
+        data += t_data[1:]
+    if len(header) != len(data):
+        print('looks like you have different syntax in headers and data\nI am generating my own')
+    header = [header[0]] + ['series '+str(i) for i in range(len(data)-1)]
+    return header, data
 
 if __name__ == "__main__":
-	data = np.array([OX, OY_1, OY_2])
-
-	header = ["Miejsce1", "Miejsce2"]
-
-	print(plotmaker(data, header))
+    print('you ran the wrong file, run main.py!')
