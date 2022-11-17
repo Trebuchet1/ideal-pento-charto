@@ -1,14 +1,12 @@
 import numpy as np
 from matplotlib import pyplot as plt
-import math
 import os
-import glob
+import re
 
 # NOTE: file imports
 from functions import *
 
 # NOTE: gets the current directory
-cwd = os.getcwd()
 config = open('config.txt', 'r').read().split('\n')
 
 # NOTE: creates a list of files within a folder specified in config file
@@ -24,39 +22,22 @@ if from_col == True:
 to_col = config[14].split('=')[1]
 if to_col == True:
     to_col = int(from_col)
-files_list = config[10].split('=')[1]
 
-# NOTE: file names
-if files_list.strip():
-    # NOTE: creates a list of specified files if there is anything in the config
-    files = [os.path.join(os.path.dirname(cwd), folder,x.strip()) for x in files_list.split(',')]
-    print('Using files:\n', '\n'.join([os.path.basename(x) for x in files]))
-else:
-    # NOTE: creates a list of all files in a directory we want
-    files = sorted(glob.glob(os.path.join(os.path.dirname(cwd), folder,"*.txt")))
-    filenames = [os.path.basename(x) for x in files]
-    print('Using files:\n', ',\n'.join(filenames))
 
+folder_name = config[7].split('=')[1].strip()
+files_list = [i.strip() for i in config[10].split('=')[1].split(',')]
+
+# NOTE: creates a list of specified files if there is anything in the config
+file_names = [i for i in os.listdir('./' + str(folder_name)) if '.txt' in i]
+if files_list != ['']:
+    file_names = [i for i in file_names if i in files_list]
+files = [('./'+folder_name+'/'+i) for i in file_names]
+print('Using files:\n', '\n'.join(file_names))
 
 # NOTE: creating the combined array, welcome to hell
-header = []
-for file_name in files:
-    print('loaded')
-    #refer to functions file for description
-    t_array, t_header = file_dubugger(file_name)
-    if file_name == files[0]:
-        header.append(t_header[0])
-        data = np.transpose(np.array([t_array[:, 0]]))
-    if not (isinstance(from_col, str) or isinstance(to_col, str)):
-            header += t_header[from_col:to_col]
-            data = np.concatenate((data, t_array[from_col:to_col, :]), axis = 1)
-    else:
-        header += [(x + ' ' + os.path.basename(file_name)) for x in t_header[1:]]
-        data = np.concatenate((data, t_array[:, 1:]), axis = 1)
-print(header)
-print(data)
-# NOTE: header is a list of column names
-# NOTE: data is a numpy array of data coresponding to header
+# NOTE: resulting header is a list, data is a numpy array
+header, data = array_creator(files)
+data = np.array(data)
 
 
 #Grzes robi teraz fragment
@@ -104,7 +85,7 @@ if type2 == 1:
 if type1 == 1:
     fig, ax = plt.subplots()
     for i in range(1, len(header)):
-        ax.plot(data[:, 0], data[:, i], label = header[i])
+        ax.plot(data[0], data[i], label = header[i])
     plt.xlabel(header[0])
     plt.ylabel("Y sygnał")
     plt.legend()
