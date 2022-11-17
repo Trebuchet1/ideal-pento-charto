@@ -41,11 +41,9 @@ By design your source files must have at least some kind of numbers separated by
 
 Project works only for .txt documents for now.
 
-1. Open Terminal and type:
-`python3 main_code.py`
-2. Drop the folder with all the project files in the directory with the folder with your
-data.
-3. Specify the folder name and columns from the files you want to use in the cofig file.
+1. Drop the folder with your data inside this folder with all the py files.
+2. Specify the folder name and columns from the files you want to use in the cofig file.
+3. Open Terminal and type: `python3 main_code.py`
 4. When you start the .py file, you will be presented with the list of files to be used.
 
 Data are presented in order: 1st line - title, 2nd and up lines - analyzed data; 1st
