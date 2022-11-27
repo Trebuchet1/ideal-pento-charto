@@ -51,8 +51,8 @@ def plotmaker(data, header):
 # NOTE: this one just checks if a file even has data
 def file_debugger(file):
     source = open(file)
-    dec = ['.', ',', '.']
-    whs = ['\s', '\s', ',']
+    dec = ['.', ',', '.', '.']
+    whs = ['\s', '\s', ';', ',']
     skippy = 0
     for i in range(4):
         line = source.readline()
@@ -90,7 +90,8 @@ def array_creator(files_list):
         data += t_data[1:]
     if len(header) != len(data):
         print('looks like you have different syntax in headers and data\nI am generating my own')
-    header = [header[0]] + ['series '+str(i) for i in range(len(data)-1)]
+        header = [header[0]] + ['series '+str(i) for i in range(len(data)-1)]
+    header = [i.replace('\n','') for i in header]
     return header, data
 
 if __name__ == "__main__":

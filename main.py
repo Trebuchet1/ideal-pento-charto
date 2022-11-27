@@ -1,10 +1,13 @@
 import numpy as np
 from matplotlib import pyplot as plt
+from matplotlib import rc
 import os
-import re
 
 # NOTE: file imports
 from functions import *
+
+font = {'family':'serif'}
+rc('font', **font)
 
 # NOTE: gets the current directory
 config = open('config.txt', 'r').read().split('\n')
@@ -28,7 +31,7 @@ folder_name = config[7].split('=')[1].strip()
 files_list = [i.strip() for i in config[10].split('=')[1].split(',')]
 
 # NOTE: creates a list of specified files if there is anything in the config
-file_names = [i for i in os.listdir('./' + str(folder_name)) if '.txt' in i]
+file_names = [i for i in os.listdir('./' + str(folder_name)) if '.csv' in i]
 if files_list != ['']:
     file_names = [i for i in file_names if i in files_list]
 files = [('./'+folder_name+'/'+i) for i in file_names]
@@ -87,6 +90,6 @@ if type1 == 1:
     for i in range(1, len(header)):
         ax.plot(data[0], data[i], label = header[i])
     plt.xlabel(header[0])
-    plt.ylabel("Y sygnał")
+    plt.ylabel("intensywność sygnału [j.a.]")
     plt.legend()
     plt.show()
