@@ -33,8 +33,6 @@ def datachange_mass(lista, funkcja):
         print(dane)
         return(dane)
 
-
-# Jasiek
 # Piotr
 def plotmaker(data, header):
 
@@ -51,8 +49,8 @@ def plotmaker(data, header):
 # NOTE: this one just checks if a file even has data
 def file_debugger(file):
     source = open(file)
-    dec = ['.', ',', '.', '.']
-    whs = ['\s', '\s', ';', ',']
+    dec = ['.', ',', '.', '.',',']
+    whs = ['\s', '\s', ';', ',',';']
     skippy = 0
     for i in range(4):
         line = source.readline()
@@ -93,6 +91,25 @@ def array_creator(files_list):
         header = [header[0]] + ['series '+str(i) for i in range(len(data)-1)]
     header = [i.replace('\n','') for i in header]
     return header, data
+
+def slicer(x_axis, from_x, to_x):
+    if from_x == None:
+        from_x = 0
+    else:
+        for i in range(len(x_axis)-1):
+            if from_x<x_axis[i+1] and from_x>=x_axis[i]:
+                print(x_axis[i])
+                from_x = i
+                break
+    if to_x == None:
+        to_x = len(x_axis)
+    else:
+        for i in range(len(x_axis)-1):
+            if to_x<x_axis[i+1] and to_x>=x_axis[i]:
+                print(x_axis[i])
+                to_x = i
+                break
+    return from_x, to_x
 
 if __name__ == "__main__":
     print('you ran the wrong file, run main.py!')

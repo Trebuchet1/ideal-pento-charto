@@ -14,5 +14,18 @@ columns, 1 or higher, column 0 is your x values, so don't enter 0
   from =
   to =
 
-I normally suspect x axis and one or many data series in further files
+I normally suspect x axis and one or many data series in all files [0, 1]
   xaxis = 1
+
+do you want to limit range of your data?
+  from_x = 1200
+  to_x = 1800
+
+invert x_axis? [0, 1] useful for IR
+  invert = 1
+
+want to highlight some points? do it like this: [x_value,y_column_index], [(...)], (...) you get the idea
+  list_of_highlights = 
+
+x axis name, default is 'data'
+  y_name = 
